@@ -1,0 +1,110 @@
+Importing the Dependencies
+
+import numpy as np
+import pandas as pd
+import sklearn.datasets
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+
+Data Collection & Processing
+
+#loading the data from sklearn
+breast_cancer_dataset = sklearn.datasets.load_breast_cancer()
+print(breast_cancer_dataset)
+
+#loading the data from sklearn
+breast_cancer_dataset = sklearn.datasets.load_breast_cancer()
+
+# loading the data to a data frame
+data_frame = pd.DataFrame(breast_cancer_dataset.data, columns = breast_cancer_dataset.feature_names)
+
+# print the first 5 rows of the dataframe
+data_frame.head()
+
+# adding the 'target' column to the data frame
+data_frame['label'] = breast_cancer_dataset.target
+
+# print last 5 rows of the dataframe
+data_frame.tail()
+
+#getting some information about the data
+data_frame.info()
+
+#checking for missing values
+data_frame.isnull()
+
+# checking the missing values from data
+data_frame.isnull().sum()
+
+# stastical measure about the data
+data_frame.describe()
+
+# checking the distribution of the target value                                                                             1 --> Benign
+data_frame['label'].value_counts()                                                                                          0 --> malignant
+
+data_frame.groupby('label').mean()
+
+separating the features and targeting
+
+X = data_frame.drop(columns='label', axis=1)
+Y = data_frame['label']
+
+print(X)
+
+print(Y)
+
+Splitting the data into Training data & Testing data
+
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size = 0.2, random_state=2)
+print(X.shape, X_train.shape, X_test.shape)
+
+Model Training
+
+Logistic Regression
+
+Model = LogisticRegression()
+
+# tarining the Logistic Regression model using training data
+Model.fit(X_train, Y_train)
+
+Model Evaluation
+
+Accuracy Score
+
+# accuracy on training data
+X_train_prediction = Model.predict(X_train)
+training_data_accuracy = accuracy_score(Y_train, X_train_prediction)
+
+print('Accuracy on training data = ', training_data_accuracy)
+
+# accuracy on test data
+X_test_prediction = Model.predict(X_test)
+test_data_accuracy = accuracy_score(Y_test, X_test_prediction)
+
+Building a Predictive System
+
+print('Accuracy on test data = ', test_data_accuracy)
+
+input_data = (13.71,20.83,90.2,577.9,0.1189,0.1645,0.09366,0.05985,0.2196,0.07451,0.5835,1.377,3.856,50.96,0.008805,0.03029,0.02488,0.01448,0.01486,0.005412,17.06,28.14,110.6,897,0.1654,0.3682,0.2678,0.1556,0.3196,0.1151)
+
+# change the input data to a numpy array
+input_data_as_numpy_array = np.asarray(input_data)
+
+# reshape the numpy array as we are predicting for one datapoint
+input_data_reshaped = input_data_as_numpy_array.reshape(1,-1)
+
+prediction = Model.predict(input_data_reshaped)
+print(prediction)
+
+if (prediction[0] == 0):
+  print('The Breast cancer is Malignant')
+
+else:
+  print('The Breast Cancer is Benign')
+
+
+
+
+
+
